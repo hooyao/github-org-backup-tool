@@ -9,7 +9,7 @@
 ## 使用容器
 挂在本地工作的`SSH Key`到容器, 并把本地的`~/BackupTool`作为备份目录
 ```shell script
- docker run --rm -it -v ~/.ssh:/root/.ssh:ro -v ~/BackupTool:/root/BackupTool test:latest \
+ docker run --rm -it -v ~/.ssh:/root/.ssh:ro -v ~/BackupTool:/root/BackupTool hooyao/github-backup-tool:latest \
   sh ./start.sh  \
   -t personal_access_token \
   # don't change /root/BackupTool, it's the mounting point inside docker
@@ -18,7 +18,7 @@
 ```
 使用临时的`SSH Key`,这需要`Personal access token`中带有创建`SSH Key`的权限, 并且你的组织没有诸如SSO之类的权限设置
 ```shell script
- docker run --rm -it -v ~/BackupTool:/root/BackupTool test:latest \
+ docker run --rm -it -v ~/BackupTool:/root/BackupTool hooyao/github-backup-tool:latest \
   sh ./start.sh  \
   -t personal_access_token \
   # don't change /root/BackupTool, it's the mounting point inside docker
