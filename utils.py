@@ -1,10 +1,10 @@
 #!/usr/bin/env python  
 """ 
-@author:shz 
+@author: Hu Yao
 @license: Apache Licence 
 @file: utils.py 
-@time: 2019/03/15
-@contact: sunhouzan@163.com
+@time: 2019/10/22
+@contact: hooyao@gmail.com
 @site:  
 @software: PyCharm 
 """
@@ -142,9 +142,9 @@ class GitHubRepo:
             return self.repo.active_branch
 
     def checkout_active_branch(self):
-        raw_outputs = self.repo.git.execute( ['git', 'remote', 'show', 'origin']).splitlines()
+        raw_outputs = self.repo.git.execute(['git', 'remote', 'show', 'origin']).splitlines()
         head_lines = [head_line for head_line in raw_outputs if 'HEAD branch' in head_line]
-        if len(head_lines)==1:
+        if len(head_lines) == 1:
             branch_name = head_lines[0].strip().split(':')[1].strip()
             self.repo.git.checkout(branch_name)
 
