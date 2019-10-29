@@ -3,7 +3,7 @@
 while getopts "t:d:o:" opt; do
   case ${opt} in
   t)
-    TOKEN="$OPTARG"1
+    TOKEN="$OPTARG"
     ;;
   d)
     DIR="$OPTARG"
@@ -17,7 +17,7 @@ while getopts "t:d:o:" opt; do
   esac
 done
 
-echo "$ORG"
+echo "Organization is $ORG"
 
 SSH_PUB_KEY=~/.ssh/id_rsa
 if test -f "$SSH_PUB_KEY"; then
