@@ -26,7 +26,7 @@ from utils import TqdmHandler
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-t", "--token", required=True,
-                help="Github token, you can generate it on https://github.com/settings/tokens/new?scopes=admin:public_key,repo&description=Backup%%20Tool")
+                help="Github token, you can generate it on https://github.com/settings/tokens/new?scopes=admin:public_key,repo&description=BackupTool")
 ap.add_argument("-d", "--directory", required=True, help="The complete path of target backup directory")
 ap.add_argument("-o", "--orgs", nargs='+', required=True, help="List of organizations, separated by space")
 args = vars(ap.parse_args())
@@ -112,10 +112,11 @@ for candidate in list(candidates):
 
             local_repo.add_remote(remote_url=repo_ssh_url, remote_name='origin')
             local_repo.fetch('origin')
-            local_repo.checkout_active_branch()
-            make_archive(os.path.join(WORKING_DIR, org_name, repo_short_name),
-                         os.path.join(WORKING_DIR, org_name, repo_short_name + '.zip'))
-            shutil.rmtree(os.path.join(WORKING_DIR, org_name, repo_short_name))
+            if len(local_repo.get_branches('origin')) > 0:
+                local_repo.checkout_active_branch()
+                make_archive(os.path.join(WORKING_DIR, org_name, repo_short_name),
+                             os.path.join(WORKING_DIR, org_name, repo_short_name + '.zip'))
+                shutil.rmtree(os.path.join(WORKING_DIR, org_name, repo_short_name))
         candidates.remove(candidate)
     except Exception as e:
         LOGGER.error(f'Failed to backup {candidate[0]}/{candidate[1]}')
