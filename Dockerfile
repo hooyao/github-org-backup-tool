@@ -1,4 +1,4 @@
-FROM python:3.7.5-alpine3.10
+FROM python:3.10.17-alpine3.21
 LABEL author="Hu Yao <hooyao@gmail.com>"
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories && \
