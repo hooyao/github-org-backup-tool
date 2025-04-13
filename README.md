@@ -3,7 +3,7 @@
 
 # 使用指南
 这个工具需要使用Github的`Personal access token`和`SSH Key`.
-`Personal access token`是必须的, 一下链接会创建一个`Personal access token`,带有仓库的访问权限
+`Personal access token`是必须的, [这个链接](https://github.com/settings/tokens/new?scopes=admin:public_key,repo&description=BackupTool) 会创建一个`Personal access token`,带有仓库的访问权限
 和创建`SSH Key`的权限. 如果不赋予`SSH Key`的创建权限, 你需要使用自己本地的`SSH Key`.
 
 ## 使用容器
