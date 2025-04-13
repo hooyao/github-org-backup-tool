@@ -94,6 +94,7 @@ for org in github_org_list:
         os.makedirs(os.path.join(WORKING_DIR, org_name))
     for repo in org.get_repos():
         if repo.raw_data['disabled']:
+            LOGGER.warning(f'{repo.name} is disabled, skipping')
             continue
         repo_short_name = repo.name
         repo_ssh_url = repo.ssh_url
@@ -104,19 +105,25 @@ for candidate in list(candidates):
     repo_short_name = candidate[1]
     repo_ssh_url = candidate[2]
     try:
-        if not os.path.exists(os.path.join(WORKING_DIR, org_name, repo_short_name + '.zip')):
-            local_repo = GitHubRepo(work_dir=os.path.join(WORKING_DIR, org_name),
-                                    dir_name=repo_short_name,
-                                    org_name=org_name,
-                                    repo_name=repo_short_name)
+        if os.path.exists(os.path.join(WORKING_DIR, org_name, repo_short_name + '.zip')):
+            LOGGER.warning(f'{repo_short_name}.zip already exists, skipping')
+            continue
 
-            local_repo.add_remote(remote_url=repo_ssh_url, remote_name='origin')
-            local_repo.fetch('origin')
-            if len(local_repo.get_branches('origin')) > 0:
-                local_repo.checkout_active_branch()
-                make_archive(os.path.join(WORKING_DIR, org_name, repo_short_name),
-                             os.path.join(WORKING_DIR, org_name, repo_short_name + '.zip'))
-                shutil.rmtree(os.path.join(WORKING_DIR, org_name, repo_short_name))
+        local_repo = GitHubRepo(work_dir=os.path.join(WORKING_DIR, org_name),
+                                dir_name=repo_short_name,
+                                org_name=org_name,
+                                repo_name=repo_short_name)
+
+        local_repo.add_remote(remote_url=repo_ssh_url, remote_name='origin')
+        local_repo.fetch('origin')
+        if len(local_repo.get_branches('origin')) <= 0:
+            LOGGER.warning(f'{local_repo.repo_name} has no branches, skipping')
+            continue
+
+        local_repo.checkout_active_branch()
+        make_archive(os.path.join(WORKING_DIR, org_name, repo_short_name),
+                     os.path.join(WORKING_DIR, org_name, repo_short_name + '.zip'))
+        shutil.rmtree(os.path.join(WORKING_DIR, org_name, repo_short_name))
         candidates.remove(candidate)
     except Exception as e:
         LOGGER.error(f'Failed to backup {candidate[0]}/{candidate[1]}')
